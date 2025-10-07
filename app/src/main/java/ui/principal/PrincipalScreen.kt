@@ -13,7 +13,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.google.firebase.auth.FirebaseAuth
-import cl.daeriquelme.appduoc_profe.ui.theme.AppDuoc_ProfeTheme
+import cl.duoc.level_up_mobile.ui.theme.AppDuoc_Level_up_Theme
+import cl.duoc.level_up_mobile.ui.theme.AppDuoc_Level_up_Theme
 
 // Items del Bottom Navigation
 sealed class BottomItem(
@@ -175,7 +176,7 @@ fun PrincipalScreen(
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun PrincipalScreenPreview() {
-    AppDuoc_ProfeTheme {
+    AppDuoc_Level_up_Theme {
         PrincipalScreen(onLogout = {})
     }
 }

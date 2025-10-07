@@ -10,7 +10,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import cl.daeriquelme.appduoc_profe.R
+import cl.duoc.level_up_mobile.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -62,4 +62,7 @@ dependencies {
     implementation("androidx.navigation:navigation-compose:2.8.2")
     implementation("androidx.compose.foundation:foundation")
     implementation("androidx.compose.material:material-icons-extended:1.7.2")
+    implementation("androidx.compose.material3:material3:1.3.0")
+    implementation("com.google.android.material:material:1.10.0")
+
 }
