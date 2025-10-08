@@ -1,4 +1,4 @@
-package ui.principal
+package cl.duoc.level_up_mobile.ui.theme
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
@@ -10,11 +10,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import com.google.firebase.auth.FirebaseAuth
+import ui.principal.PrincipalViewModel
 import cl.duoc.level_up_mobile.ui.theme.AppDuoc_Level_up_Theme
-import cl.duoc.level_up_mobile.ui.theme.AppDuoc_Level_up_Theme
+
 
 // Items del Bottom Navigation
 sealed class BottomItem(
@@ -68,7 +70,8 @@ private fun BottomBar(navController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PrincipalScreen(
-    onLogout: () -> Unit = {}
+    onLogout: () -> Unit = {},
+    vm: PrincipalViewModel = viewModel ()
 ) {
     val user = FirebaseAuth.getInstance().currentUser
     val saludo = "Hola ${user?.email ?: "usuario"}"

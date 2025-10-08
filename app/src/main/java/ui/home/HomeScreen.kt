@@ -1,4 +1,4 @@
-package cl.daeriquelme.appduoc_profe.ui.home
+package cl.duoc.level_up_mobile.ui.home
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*

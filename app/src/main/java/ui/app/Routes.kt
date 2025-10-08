@@ -1,4 +1,4 @@
-package cl.daeriquelme.appduoc_profe.ui.app
+package cl.duoc.level_up_mobile.ui.app
 
 sealed class Route(val path: String) {
     data object HomeRoot : Route("homeRoot")

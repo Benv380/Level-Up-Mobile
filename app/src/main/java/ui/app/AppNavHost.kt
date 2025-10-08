@@ -1,4 +1,4 @@
-package cl.daeriquelme.appduoc_profe.ui.app
+package cl.duoc.level_up_mobile.ui.app
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -7,10 +7,10 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import cl.daeriquelme.appduoc_profe.ui.RecuperarPasswordScreen
 import cl.daeriquelme.appduoc_profe.ui.RegistrarseScreen
-import cl.daeriquelme.appduoc_profe.ui.home.HomeScreen
 import cl.duoc.level_up_mobile.LoginScreen
-import cl.duoc.level_up_mobile.R
-import ui.principal.PrincipalScreen
+import cl.duoc.level_up_mobile.ui.home.HomeScreen
+import cl.duoc.level_up_mobile.ui.theme.PrincipalScreen
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
