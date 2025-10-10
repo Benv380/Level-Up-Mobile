@@ -1,5 +1,7 @@
 package cl.duoc.level_up_mobile.ui.theme
 
+import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyRow
@@ -12,6 +14,8 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -195,14 +199,41 @@ fun PrincipalScreen(
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Clips") }
             }
             composable(BottomItem.More.route) {
+                val context = LocalContext.current
+                val prefs = context.getSharedPreferences("settings", Context.MODE_PRIVATE)
+                var darkMode by remember { mutableStateOf(prefs.getBoolean("dark_mode", false)) }
+
                 Column(
                     Modifier
                         .fillMaxSize()
                         .padding(24.dp),
                     horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
+                    verticalArrangement = Arrangement.spacedBy(20.dp, Alignment.CenterVertically)
                 ) {
-                    Text("Más opciones")
+                    Text("Más opciones", style = MaterialTheme.typography.headlineSmall)
+
+                    // 🔘 Switch de modo oscuro
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        Text("Modo oscuro", style = MaterialTheme.typography.bodyLarge)
+                        Switch(
+                            checked = darkMode,
+                            onCheckedChange = { isChecked ->
+                                darkMode = isChecked
+                                prefs.edit().putBoolean("dark_mode", isChecked).apply()
+                                if (isChecked) {
+                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                                } else {
+                                    AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                                }
+                            }
+                        )
+                    }
+
+                    Divider(thickness = 1.dp, color = MaterialTheme.colorScheme.outline)
+
                     Button(onClick = { vm.logout() }) {
                         Icon(Icons.Outlined.Close, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
