@@ -5,9 +5,9 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import cl.daeriquelme.appduoc_profe.ui.RecuperarPasswordScreen
-import cl.daeriquelme.appduoc_profe.ui.RegistrarseScreen
 import cl.duoc.level_up_mobile.LoginScreen
+import cl.duoc.level_up_mobile.ui.RecuperarPasswordScreen
+import cl.duoc.level_up_mobile.ui.RegistrarseScreen
 import cl.duoc.level_up_mobile.ui.home.HomeScreen
 import cl.duoc.level_up_mobile.ui.theme.PrincipalScreen
 

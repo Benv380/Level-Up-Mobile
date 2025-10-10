@@ -20,7 +20,7 @@ fun HomeScreen(
     onRecoverClick: () -> Unit,
 ) {
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Mi App Kotlin") }) }
+        topBar = { TopAppBar(title = { Text("Level-Up") }) }
     ) { inner ->
         HomeContent(
             modifier = Modifier

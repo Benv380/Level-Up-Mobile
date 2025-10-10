@@ -1,4 +1,4 @@
-package cl.daeriquelme.appduoc_profe.ui
+package cl.duoc.level_up_mobile.ui
 
 import android.util.Patterns
 import android.widget.Toast

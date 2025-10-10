@@ -1,28 +1,32 @@
 package cl.duoc.level_up_mobile.ui.theme
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
-import com.google.firebase.auth.FirebaseAuth
-import ui.principal.PrincipalViewModel
-import cl.duoc.level_up_mobile.ui.theme.AppDuoc_Level_up_Theme
+import cl.duoc.level_up_mobile.ui.principal.PrincipalViewModel
+import cl.duoc.level_up_mobile.ui.principal.components.UiProductosCard
 
 
 // Items del Bottom Navigation
+// --- Bottom items ---
 sealed class BottomItem(
     val route: String,
     val title: String,
-    val icon: ImageVector,
+    val icon: androidx.compose.ui.graphics.vector.ImageVector,
     val badge: Int? = null
 ) {
     data object Home : BottomItem("home", "Inicio", Icons.Outlined.Home)
@@ -31,7 +35,6 @@ sealed class BottomItem(
     data object Clips : BottomItem("clips", "Clips", Icons.Outlined.PlayArrow)
     data object More : BottomItem("more", "Más", Icons.Outlined.Menu)
 }
-
 private val bottomItems = listOf(
     BottomItem.Home, BottomItem.Favs, BottomItem.Cart, BottomItem.Clips, BottomItem.More
 )
@@ -40,7 +43,6 @@ private val bottomItems = listOf(
 private fun BottomBar(navController: NavHostController) {
     val backStack by navController.currentBackStackEntryAsState()
     val currentRoute = backStack?.destination?.route
-
     NavigationBar {
         bottomItems.forEach { item ->
             NavigationBarItem(
@@ -67,16 +69,29 @@ private fun BottomBar(navController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun PrincipalScreen(
     onLogout: () -> Unit = {},
-    vm: PrincipalViewModel = viewModel ()
+    vm: PrincipalViewModel = viewModel()
 ) {
-    val user = FirebaseAuth.getInstance().currentUser
-    val saludo = "Hola ${user?.email ?: "usuario"}"
+    val state by vm.ui.collectAsState()
+    val categoriaSel by vm.categoriaSel.collectAsState()
+    val productos by vm.productosFiltrados.collectAsState()
+
     var expanded by remember { mutableStateOf(false) }
     val tabsNav = rememberNavController()
+
+    // logout reactivo
+    LaunchedEffect(state.loggedOut) {
+        if (state.loggedOut) onLogout()
+    }
+
+    // Snackbar para errores
+    val snackbarHostState = remember { SnackbarHostState() }
+    LaunchedEffect(state.error) {
+        state.error?.let { snackbarHostState.showSnackbar(it) }
+    }
 
     Scaffold(
         topBar = {
@@ -104,17 +119,16 @@ fun PrincipalScreen(
                             text = { Text("Logout") },
                             onClick = {
                                 expanded = false
-                                FirebaseAuth.getInstance().signOut()
-                                onLogout()
+                                vm.logout()
                             }
                         )
                     }
                 }
             )
         },
-        bottomBar = { BottomBar(tabsNav) }
+        bottomBar = { BottomBar(tabsNav) },
+        snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { inner ->
-        // NavHost de pestañas
         NavHost(
             navController = tabsNav,
             startDestination = BottomItem.Home.route,
@@ -127,32 +141,59 @@ fun PrincipalScreen(
                         .padding(16.dp),
                     verticalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
+                    val saludo = "Hola ${state.email ?: "usuario"}"
                     Text(saludo, style = MaterialTheme.typography.headlineSmall)
                     Text("Bienvenido a tu pantalla principal.")
+
+                    // ====== Filtros por categoría (desde VM) ======
+                    LazyRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        contentPadding = PaddingValues(vertical = 4.dp)
+                    ) {
+                        items(vm.categorias.size) { idx ->
+                            val cat = vm.categorias[idx]
+                            FilterChip(
+                                selected = categoriaSel == cat,
+                                onClick = { vm.setCategoria(cat) },
+                                label = { Text(cat) }
+                            )
+                        }
+                    }
+                    LazyVerticalGrid(
+                        columns = GridCells.Adaptive(minSize = 180.dp),
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.spacedBy(12.dp),
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                        contentPadding = PaddingValues(top = 8.dp, bottom = 80.dp)
+                    ) {
+                        items(productos, key = { it.id }) { producto ->
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .aspectRatio(0.6f)
+                            ) {
+                                UiProductosCard(
+                                    producto = producto,
+                                    onAgregar = {
+                                        // TODO: vm.agregarAlCarrito(producto.id)
+                                        // Snackbar opcional usando snackbarHostState si quieres feedback
+                                    }
+                                )
+                            }
+                        }
+                    }
                 }
             }
 
             composable(BottomItem.Favs.route) {
-                Box(
-                    Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) { Text("Favoritos") }
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Favoritos") }
             }
-
             composable(BottomItem.Cart.route) {
-                Box(
-                    Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) { Text("Carrito") }
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Carrito") }
             }
-
             composable(BottomItem.Clips.route) {
-                Box(
-                    Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) { Text("Clips") }
+                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Clips") }
             }
-
             composable(BottomItem.More.route) {
                 Column(
                     Modifier
@@ -162,13 +203,10 @@ fun PrincipalScreen(
                     verticalArrangement = Arrangement.spacedBy(16.dp, Alignment.CenterVertically)
                 ) {
                     Text("Más opciones")
-                    Button(onClick = {
-                        FirebaseAuth.getInstance().signOut()
-                        onLogout()
-                    }) {
+                    Button(onClick = { vm.logout() }) {
                         Icon(Icons.Outlined.Close, contentDescription = null)
                         Spacer(Modifier.width(8.dp))
-                        Text("Cerrar sesión")
+                        Text(if (state.loading) "Cerrando..." else "Cerrar sesión")
                     }
                 }
             }
