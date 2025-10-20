@@ -23,7 +23,7 @@ fun AppNavHost() {
             HomeScreen(
                 onLoginClick = { nav.navigate(Route.Login.path) },
                 onRegisterClick = { nav.navigate(Route.Register.path) },
-                onRecoverClick = { nav.navigate(Route.RecoverPassword.path) }
+                onRecoverClick = { nav.navigate(Route.RecoverPassword.path) },
             )
         }
 

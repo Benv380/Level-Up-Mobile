@@ -36,11 +36,13 @@ sealed class BottomItem(
     data object Home : BottomItem("home", "Inicio", Icons.Outlined.Home)
     data object Favs : BottomItem("favs", "Favoritos", Icons.Outlined.FavoriteBorder)
     data object Cart : BottomItem("cart", "Carrito", Icons.Outlined.ShoppingCart, badge = 3)
-    data object Clips : BottomItem("clips", "Clips", Icons.Outlined.PlayArrow)
+    //data object Purchases : BottomItem("cart", "Mis compras", Icons.Outlined.PlayArrow)
+    data object Agenda : BottomItem("agenda", "Agenda", Icons.Outlined.PlayArrow)
     data object More : BottomItem("more", "Más", Icons.Outlined.Menu)
 }
+
 private val bottomItems = listOf(
-    BottomItem.Home, BottomItem.Favs, BottomItem.Cart, BottomItem.Clips, BottomItem.More
+    BottomItem.Home, BottomItem.Favs, BottomItem.Cart, BottomItem.Agenda, BottomItem.More
 )
 
 @Composable
@@ -195,8 +197,20 @@ fun PrincipalScreen(
             composable(BottomItem.Cart.route) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Carrito") }
             }
-            composable(BottomItem.Clips.route) {
-                Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Clips") }
+            // RECORDATORIO
+            composable(BottomItem.Agenda.route) {
+                val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
+                if (uid == null) {
+                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                        Text("Debes iniciar sesión para ver tus recordatorios.")
+                    }
+                } else {
+                    val context = androidx.compose.ui.platform.LocalContext.current
+                    val factory = remember(uid) { cl.duoc.level_up_mobile.ui.vmfactory.RecordatorioVMFactory (context, uid) }
+                    val rvm: cl.duoc.level_up_mobile.ui.recordatorio.RecordatorioViewModel =
+                        androidx.lifecycle.viewmodel.compose.viewModel(factory = factory)
+                    cl.duoc.level_up_mobile.ui.recordatorio.RecordatorioScreen(rvm)
+                }
             }
             composable(BottomItem.More.route) {
                 val context = LocalContext.current
