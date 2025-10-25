@@ -1,8 +1,8 @@
-package ui.profile
+package cl.duoc.level_up_mobile
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
-import data.media.MediaRepository
+
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update

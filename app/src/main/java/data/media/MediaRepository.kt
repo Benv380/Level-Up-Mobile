@@ -1,4 +1,4 @@
-package data.media
+package cl.duoc.level_up_mobile
 
 import android.content.ContentValues
 import android.content.Context

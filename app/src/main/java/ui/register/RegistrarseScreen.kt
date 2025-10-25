@@ -3,6 +3,7 @@ package cl.duoc.level_up_mobile.ui
 import android.util.Patterns
 import android.widget.Toast
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -82,6 +83,7 @@ fun RegistrarseScreen(
                     value = email, onValueChange = { email = it },
                     label = { Text("Correo electrónico") }, singleLine = true,
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
@@ -89,6 +91,7 @@ fun RegistrarseScreen(
                     label = { Text("Contraseña") }, singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 )
                 OutlinedTextField(
@@ -96,6 +99,7 @@ fun RegistrarseScreen(
                     label = { Text("Confirmar contraseña") }, singleLine = true,
                     visualTransformation = PasswordVisualTransformation(),
                     keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+                    shape = RoundedCornerShape(12.dp),
                     modifier = Modifier.fillMaxWidth()
                 )
 
