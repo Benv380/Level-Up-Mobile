@@ -1,5 +1,3 @@
-package cl.duoc.level_up_mobile.ui.app
-
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
@@ -8,6 +6,7 @@ import androidx.navigation.compose.rememberNavController
 import cl.duoc.level_up_mobile.LoginScreen
 import cl.duoc.level_up_mobile.ui.RecuperarPasswordScreen
 import cl.duoc.level_up_mobile.ui.RegistrarseScreen
+import cl.duoc.level_up_mobile.ui.app.Route
 import cl.duoc.level_up_mobile.ui.home.HomeScreen
 import cl.duoc.level_up_mobile.ui.theme.PrincipalScreen
 
@@ -17,7 +16,25 @@ import cl.duoc.level_up_mobile.ui.theme.PrincipalScreen
 fun AppNavHost() {
     val nav = rememberNavController()
 
-    NavHost(navController = nav, startDestination = Route.HomeRoot.path) {
+    NavHost(
+        navController = nav,
+        startDestination = "splash"
+    ) {
+
+        composable("splash") {
+            SplashScreen(
+                onNavToPrincipal = {
+                    nav.navigate(Route.Principal.path) {
+                        popUpTo("splash") { inclusive = true }
+                    }
+                },
+                onNavToHomeRoot = {
+                    nav.navigate(Route.HomeRoot.path) {
+                        popUpTo("splash") { inclusive = true }
+                    }
+                }
+            )
+        }
 
         composable(Route.HomeRoot.path) {
             HomeScreen(
@@ -32,8 +49,7 @@ fun AppNavHost() {
                 onBack = { nav.popBackStack() },
                 onLoginSuccess = {
                     nav.navigate(Route.Principal.path) {
-                        // si quieres limpiar hacia atrás:
-                        // popUpTo(Route.HomeRoot.path) { inclusive = false }
+                        popUpTo(Route.HomeRoot.path) { inclusive = true }
                         launchSingleTop = true
                     }
                 }
@@ -44,7 +60,7 @@ fun AppNavHost() {
             PrincipalScreen(
                 onLogout = {
                     nav.navigate(Route.HomeRoot.path) {
-                        popUpTo(Route.HomeRoot.path) { inclusive = true } // limpia back stack
+                        popUpTo(Route.Principal.path) { inclusive = true }
                         launchSingleTop = true
                     }
                 }
