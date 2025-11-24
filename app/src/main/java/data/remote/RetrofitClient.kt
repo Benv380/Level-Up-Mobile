@@ -33,8 +33,8 @@ object RetrofitClient {
             .create(ApiService::class.java)
     }
 
-    private const val BACKEND_BASE_URL = "https://webtest.daeriquelme.cl/"
-    private const val API_KEY = "sk_live_7Fzj1uY3p9xTQv5aR8nE2mL4wC6kD9qH"
+    private const val BACKEND_BASE_URL = 
+    private const val API_KEY = 
 
     private val apiKeyInterceptor = Interceptor { chain ->
         val req = chain.request().newBuilder()
