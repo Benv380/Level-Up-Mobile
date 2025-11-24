@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import data.media.MediaRepository
 import ui.profile.ProfileViewModel
-import ui.repository.auth.FirebaseAuthDataSource
+import repository.auth.FirebaseAuthDataSource
 
 
 class ProfileVMFactory(

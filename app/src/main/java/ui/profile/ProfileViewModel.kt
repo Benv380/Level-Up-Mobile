@@ -6,7 +6,7 @@ import data.media.MediaRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
-import ui.repository.auth.FirebaseAuthDataSource
+import repository.auth.FirebaseAuthDataSource
 
 data class ProfileUiState(
     val uid: String? = null,

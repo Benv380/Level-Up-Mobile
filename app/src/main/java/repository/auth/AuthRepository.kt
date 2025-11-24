@@ -1,7 +1,7 @@
-
-package ui.repository.auth
+package repository.auth
 
 import ui.model.User
+import repository.auth.FirebaseAuthDataSource
 
 class AuthRepository(
     private val ds: FirebaseAuthDataSource = FirebaseAuthDataSource()

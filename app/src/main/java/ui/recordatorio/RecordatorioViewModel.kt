@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import ui.model.Recordatorio
-import ui.repository.auth.RecordatorioRepository
+import repository.auth.RecordatorioRepository
 import java.text.SimpleDateFormat
 import java.util.*
 

@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import ui.model.User
-import ui.repository.auth.AuthRepository
+import repository.auth.AuthRepository
 
 data class LoginUiState(
     val email: String = "",

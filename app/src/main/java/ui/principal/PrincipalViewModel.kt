@@ -11,7 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
-import ui.repository.auth.AuthRepository
+import repository.auth.AuthRepository
 
 
 data class PrincipalUiState(

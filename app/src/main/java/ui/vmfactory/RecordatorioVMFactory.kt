@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import cl.duoc.level_up_mobile.ui.recordatorio.RecordatorioViewModel
 import data.local.AppDatabase
-import ui.repository.auth.RecordatorioRepository
+import repository.auth.RecordatorioRepository
 
 
 

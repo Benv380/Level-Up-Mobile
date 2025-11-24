@@ -1,4 +1,4 @@
-package ui.repository.auth
+package repository.auth
 
 import data.local.ReminderDao
 import kotlinx.coroutines.flow.Flow
