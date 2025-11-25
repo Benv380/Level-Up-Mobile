@@ -1,5 +1,6 @@
 package cl.duoc.level_up_mobile.ui.theme
 
+import UiProductosCard
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.ExperimentalFoundationApi

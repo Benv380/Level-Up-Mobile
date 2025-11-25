@@ -1,21 +1,39 @@
-package cl.duoc.level_up_mobile.ui.principal.components
-
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
-import androidx.compose.material3.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import cl.duoc.level_up_mobile.ui.model.Producto
+import model.Producto
 
 @Composable
 fun UiProductosCard(
     producto: Producto,
     onAgregar: (Producto) -> Unit
 ) {
+    val context = LocalContext.current
+
+    val imageId = remember(producto.imagen) {
+        context.resources.getIdentifier(
+            producto.imagen,   // "ps5", "catan", etc.
+            "drawable",
+            context.packageName
+        )
+    }
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -27,9 +45,10 @@ fun UiProductosCard(
                 .fillMaxSize()
                 .padding(12.dp)
         ) {
+
             Image(
-                painter = painterResource(producto.imagenRes),
-                contentDescription = producto.titulo,
+                painter = painterResource(id = imageId),
+                contentDescription = producto.nombre,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(120.dp),
@@ -39,15 +58,10 @@ fun UiProductosCard(
             Spacer(Modifier.height(8.dp))
 
             Text(
-                text = producto.titulo,
+                text = producto.nombre,
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 2,
                 overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = producto.categoria,
-                style = MaterialTheme.typography.labelSmall,
-                color = MaterialTheme.colorScheme.primary
             )
 
             Spacer(Modifier.height(4.dp))
@@ -68,4 +82,3 @@ fun UiProductosCard(
         }
     }
 }
-

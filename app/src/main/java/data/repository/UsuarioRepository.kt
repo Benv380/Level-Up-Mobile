@@ -1,7 +1,6 @@
 package cl.duoc.level_up_mobile.data.repository
 
-import cl.duoc.level_up_mobile.data.remote.ApiBackendService
-import cl.duoc.level_up_mobile.data.remote.RetrofitClient
+
 import cl.duoc.level_up_mobile.data.remote.dto.UsuarioDto
 import cl.duoc.level_up_mobile.data.remote.dto.UsuarioResp
 import okhttp3.MediaType.Companion.toMediaTypeOrNull

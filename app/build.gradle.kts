@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "cl.duoc.level_up_mobile"
-    compileSdk = 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "cl.duoc.level_up_mobile"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -30,58 +30,75 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "17"
     }
 }
 
-dependencies {
 
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.activity.compose)
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.ui)
-    implementation(libs.androidx.ui.graphics)
-    implementation(libs.androidx.ui.tooling.preview)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.material3)
-    implementation(libs.androidx.runtime)
-    implementation(libs.androidx.compose.foundation)
-    implementation(libs.androidx.compose.runtime)
-    implementation(libs.androidx.compose.animation.core)
-    implementation(libs.androidx.compose.ui.text)
-    implementation(libs.foundation)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-    androidTestImplementation(platform(libs.androidx.compose.bom))
-    androidTestImplementation(libs.androidx.ui.test.junit4)
-    debugImplementation(libs.androidx.ui.tooling)
-    debugImplementation(libs.androidx.ui.test.manifest)
+dependencies {
+    implementation("com.google.code.gson:gson:2.10.1")
+    // Retrofit
+    implementation("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+
+
+    // Logging interceptor (OKHttp)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
+
+    implementation("androidx.compose.material3:material3")
+
+
+    // Compose BOM
+    implementation(platform("androidx.compose:compose-bom:2025.01.00"))
+
+    // Compose Core
+    implementation("androidx.compose.ui:ui")
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation(libs.appcompat)
+    debugImplementation("androidx.compose.ui:ui-tooling")
+
+    // Material 3
+    implementation("androidx.compose.material3:material3")
+
+    // Foundation + Runtime
+    implementation("androidx.compose.runtime:runtime")
+    implementation("androidx.compose.foundation:foundation")
+
+    // Activity Compose
+    implementation("androidx.activity:activity-compose")
+
+    // Lifecycle VM
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose")
+
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.8.2")
+
+    // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.2.0"))
     implementation("com.google.firebase:firebase-auth-ktx")
-    implementation("androidx.navigation:navigation-compose:2.8.2")
-    implementation("androidx.compose.foundation:foundation")
-    implementation("androidx.compose.material:material-icons-extended:1.7.2")
-    implementation("androidx.compose.material3:material3:1.3.0")
-    implementation("com.google.android.material:material:1.10.0")
+
+    // Coil (imágenes)
     implementation("io.coil-kt:coil-compose:2.6.0")
 
+    // Material Icons
+    implementation("androidx.compose.material:material-icons-extended")
 
+    // Room
     val room_version = "2.8.1"
     implementation("androidx.room:room-runtime:$room_version")
-    ksp("androidx.room:room-compiler:$room_version")
-    annotationProcessor("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-    implementation("androidx.room:room-rxjava2:$room_version")
-    implementation("androidx.room:room-rxjava3:$room_version")
-    implementation("androidx.room:room-guava:$room_version")
-    testImplementation("androidx.room:room-testing:$room_version")
-    implementation("androidx.room:room-paging:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
+
+    // Testing
+    testImplementation("junit:junit:4.13.2")
 }
 

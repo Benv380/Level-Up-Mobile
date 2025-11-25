@@ -20,6 +20,7 @@ runtimeVersion = "1.9.3"
 animationCore = "1.9.3"
 uiText = "1.9.3"
 foundationVersion = "1.9.3"
+appcompatVersion = "1.7.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -48,6 +49,7 @@ androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime
 androidx-compose-animation-core = { group = "androidx.compose.animation", name = "animation-core", version.ref = "animationCore" }
 androidx-compose-ui-text = { group = "androidx.compose.ui", name = "ui-text", version.ref = "uiText" }
 foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundationVersion" }
+appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompatVersion" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
