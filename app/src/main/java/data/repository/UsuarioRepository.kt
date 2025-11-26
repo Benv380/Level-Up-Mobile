@@ -1,15 +1,14 @@
 package cl.duoc.level_up_mobile.data.repository
 
 
+import cl.duoc.level_up_mobile.data.remote.RetrofitClient
 import cl.duoc.level_up_mobile.data.remote.dto.UsuarioDto
 import cl.duoc.level_up_mobile.data.remote.dto.UsuarioResp
+import data.remote.ApiBackendService
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
-import okhttp3.RequestBody.Companion.toRequestBody
-import retrofit2.Response
 import java.io.File
 import retrofit2.HttpException
 import kotlin.jvm.java
@@ -17,7 +16,7 @@ import kotlin.to
 
 class UsuarioRepository(
     private val api: ApiBackendService =
-        RetrofitClient.retrofitBackend.create(ApiBackendService::class.java)
+        RetrofitClient.apiBackend
 ) {
 
     suspend fun crearUsuario(dto: UsuarioDto): Boolean {

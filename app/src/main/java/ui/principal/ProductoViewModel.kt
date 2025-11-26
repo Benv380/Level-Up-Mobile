@@ -9,67 +9,29 @@ import data.repository.ProductoRepository
 import kotlinx.coroutines.launch
 import model.Producto
 
-class ProductoViewModel : ViewModel() {
-
-    private val repository = ProductoRepository()
+class ProductoViewModel(
+    private val repo: ProductoRepository = ProductoRepository()
+) : ViewModel() {
 
     var productos by mutableStateOf<List<Producto>>(emptyList())
         private set
 
-    var isLoading by mutableStateOf(false)
+    var loading by mutableStateOf(false)
         private set
 
-    var errorMensaje by mutableStateOf<String?>(null)
+    var error by mutableStateOf<String?>(null)
         private set
-
-    init {
-        cargarProductos()
-    }
 
     fun cargarProductos() {
         viewModelScope.launch {
             try {
-                isLoading = true
-                errorMensaje = null
-                productos = repository.getProductos()
+                loading = true
+                error = null
+                productos = repo.getProductos()
             } catch (e: Exception) {
-                e.printStackTrace()
-                errorMensaje = "Error al cargar productos"
+                error = "Error cargando productos"
             } finally {
-                isLoading = false
-            }
-        }
-    }
-
-    fun crear(producto: Producto) {
-        viewModelScope.launch {
-            try {
-                repository.crearProducto(producto)
-                cargarProductos()
-            } catch (e: Exception) {
-                errorMensaje = "No se pudo crear el producto"
-            }
-        }
-    }
-
-    fun actualizar(id: Long, producto: Producto) {
-        viewModelScope.launch {
-            try {
-                repository.actualizarProducto(id, producto)
-                cargarProductos()
-            } catch (e: Exception) {
-                errorMensaje = "No se pudo actualizar el producto"
-            }
-        }
-    }
-
-    fun eliminar(id: Long) {
-        viewModelScope.launch {
-            try {
-                repository.eliminarProducto(id)
-                cargarProductos()
-            } catch (e: Exception) {
-                errorMensaje = "No se pudo eliminar el producto"
+                loading = false
             }
         }
     }

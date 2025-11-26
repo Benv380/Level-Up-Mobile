@@ -11,6 +11,7 @@ object RetrofitProductoClient {
     // 🔥 Usa 10.0.2.2 si estás en emulador Android
     private const val BASE_URL = "http://10.0.2.2:8080/"
 
+
     private val logger = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
     }

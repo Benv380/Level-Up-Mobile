@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.*
@@ -23,7 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import cl.duoc.level_up_mobile.ui.principal.PrincipalViewModel
-import cl.duoc.level_up_mobile.ui.principal.components.UiProductosCard
+import ui.principal.ProductoViewModel
 
 
 // Items del Bottom Navigation
@@ -80,11 +81,18 @@ private fun BottomBar(navController: NavHostController) {
 @Composable
 fun PrincipalScreen(
     onLogout: () -> Unit = {},
-    vm: PrincipalViewModel = viewModel()
+    vm: PrincipalViewModel = viewModel(),
+    productoVM: ProductoViewModel = viewModel()   // <<--- AGREGADO
 ) {
     val state by vm.ui.collectAsState()
-    val categoriaSel by vm.categoriaSel.collectAsState()
-    val productos by vm.productosFiltrados.collectAsState()
+
+    val productos = productoVM.productos           // <<--- AHORA VIENE DEL PRODUCTO VM
+    val loadingProductos = productoVM.loading
+    val errorProductos = productoVM.error
+
+    LaunchedEffect(Unit) {
+        productoVM.cargarProductos()
+    }
 
     var expanded by remember { mutableStateOf(false) }
     val tabsNav = rememberNavController()
@@ -152,20 +160,20 @@ fun PrincipalScreen(
                     Text(saludo, style = MaterialTheme.typography.headlineSmall)
                     Text("Bienvenido a tu pantalla principal.")
 
-                    // ====== Filtros por categoría (desde VM) ======
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = PaddingValues(vertical = 4.dp)
-                    ) {
-                        items(vm.categorias.size) { idx ->
-                            val cat = vm.categorias[idx]
-                            FilterChip(
-                                selected = categoriaSel == cat,
-                                onClick = { vm.setCategoria(cat) },
-                                label = { Text(cat) }
-                            )
+                    // Cargando productos
+                    if (loadingProductos) {
+                        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                            CircularProgressIndicator()
                         }
+                        return@composable
                     }
+
+                    // Error al cargar
+                    errorProductos?.let { err ->
+                        Text("⚠ $err", color = MaterialTheme.colorScheme.error)
+                    }
+
+                    // Mostrar productos reales
                     LazyVerticalGrid(
                         columns = GridCells.Adaptive(minSize = 180.dp),
                         modifier = Modifier.fillMaxSize(),
@@ -181,10 +189,7 @@ fun PrincipalScreen(
                             ) {
                                 UiProductosCard(
                                     producto = producto,
-                                    onAgregar = {
-                                        // TODO: vm.agregarAlCarrito(producto.id)
-                                        // Snackbar opcional usando snackbarHostState si quieres feedback
-                                    }
+                                    onAgregar = {}
                                 )
                             }
                         }
@@ -192,13 +197,13 @@ fun PrincipalScreen(
                 }
             }
 
+            // --- resto igual ---
             composable(BottomItem.Favs.route) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Favoritos") }
             }
             composable(BottomItem.Cart.route) {
                 Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) { Text("Carrito") }
             }
-            // RECORDATORIO
             composable(BottomItem.Agenda.route) {
                 val uid = com.google.firebase.auth.FirebaseAuth.getInstance().currentUser?.uid
                 if (uid == null) {
@@ -206,8 +211,8 @@ fun PrincipalScreen(
                         Text("Debes iniciar sesión para ver tus recordatorios.")
                     }
                 } else {
-                    val context = androidx.compose.ui.platform.LocalContext.current
-                    val factory = remember(uid) { cl.duoc.level_up_mobile.ui.vmfactory.RecordatorioVMFactory (context, uid) }
+                    val context = LocalContext.current
+                    val factory = remember(uid) { cl.duoc.level_up_mobile.ui.vmfactory.RecordatorioVMFactory(context, uid) }
                     val rvm: cl.duoc.level_up_mobile.ui.recordatorio.RecordatorioViewModel =
                         androidx.lifecycle.viewmodel.compose.viewModel(factory = factory)
                     cl.duoc.level_up_mobile.ui.recordatorio.RecordatorioScreen(rvm)
@@ -227,7 +232,6 @@ fun PrincipalScreen(
                 ) {
                     Text("Más opciones", style = MaterialTheme.typography.headlineSmall)
 
-                    // 🔘 Switch de modo oscuro
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -238,11 +242,10 @@ fun PrincipalScreen(
                             onCheckedChange = { isChecked ->
                                 darkMode = isChecked
                                 prefs.edit().putBoolean("dark_mode", isChecked).apply()
-                                if (isChecked) {
+                                if (isChecked)
                                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                                } else {
+                                else
                                     AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                                }
                             }
                         )
                     }
@@ -259,6 +262,7 @@ fun PrincipalScreen(
         }
     }
 }
+
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable

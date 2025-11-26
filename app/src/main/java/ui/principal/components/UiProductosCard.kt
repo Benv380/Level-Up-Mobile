@@ -10,29 +10,22 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import model.Producto
+import ui.model.mappers.toImageRes
 
 @Composable
 fun UiProductosCard(
     producto: Producto,
     onAgregar: (Producto) -> Unit
 ) {
-    val context = LocalContext.current
-
-    val imageId = remember(producto.imagen) {
-        context.resources.getIdentifier(
-            producto.imagen,   // "ps5", "catan", etc.
-            "drawable",
-            context.packageName
-        )
-    }
+    // Imagen segura desde el mapper
+    // SIEMPRE devuelve una imagen válida
+    val imageRes = producto.toImageRes()
 
     Card(
         modifier = Modifier
@@ -47,12 +40,12 @@ fun UiProductosCard(
         ) {
 
             Image(
-                painter = painterResource(id = imageId),
+                painter = painterResource(imageRes),
                 contentDescription = producto.nombre,
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(120.dp),
-                contentScale = ContentScale.Crop
+                    .height(160.dp)
             )
 
             Spacer(Modifier.height(8.dp))

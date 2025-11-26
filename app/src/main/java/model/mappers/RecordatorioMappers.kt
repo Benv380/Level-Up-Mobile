@@ -1,7 +1,7 @@
 package cl.duoc.level_up_mobile.model.mappers
 
-import cl.duoc.level_up_mobile.data.local.RecordatorioEntity
 import cl.duoc.level_up_mobile.model.Recordatorio
+import data.local.RecordatorioEntity
 
 fun RecordatorioEntity.toDto() = Recordatorio(
     id = id,

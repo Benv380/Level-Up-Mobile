@@ -1,4 +1,4 @@
-package cl.duoc.level_up_mobile.data.repository
+package data.repository
 
 import cl.duoc.level_up_mobile.data.remote.RetrofitProductoClient
 import model.Producto
@@ -9,6 +9,6 @@ class ProductoRepository {
 
     suspend fun getProductos(): List<Producto> {
         val response = api.getProductos()
-        return response.embedded.productos
+        return response.embedded.productList   // ✅ ESTA ES LA CORRECTA
     }
 }
