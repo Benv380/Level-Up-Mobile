@@ -11,7 +11,6 @@ import org.junit.Ignore
  *
  * See [testing documentation](http://d.android.com/tools/testing).
  */
-@Ignore
 class ExampleUnitTest {
     @Test
     fun addition_isCorrect() {

@@ -3,9 +3,7 @@ package cl.duoc.level_up_mobile
 import android.content.Context
 import android.net.Uri
 import com.google.firebase.auth.FirebaseUser
-import data.media.MediaRepository
 import repository.auth.FirebaseAuthDataSource
-import ui.profile.ProfileViewModel
 import io.mockk.every
 import io.mockk.mockk
 import org.junit.Test

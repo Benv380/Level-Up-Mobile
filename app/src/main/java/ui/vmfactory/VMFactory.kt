@@ -2,8 +2,8 @@ package cl.duoc.level_up_mobile.ui.vmfactory
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import data.media.MediaRepository
-import ui.profile.ProfileViewModel
+import cl.duoc.level_up_mobile.MediaRepository
+import cl.duoc.level_up_mobile.ProfileViewModel
 import repository.auth.FirebaseAuthDataSource
 
 
