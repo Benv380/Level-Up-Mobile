@@ -25,6 +25,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import cl.duoc.level_up_mobile.ui.principal.PrincipalViewModel
 import ui.principal.ProductoViewModel
+import ui.principal.WeatherViewModel
+import ui.principal.components.WeatherCard
 
 
 // Items del Bottom Navigation
@@ -89,6 +91,10 @@ fun PrincipalScreen(
     val productos = productoVM.productos           // <<--- AHORA VIENE DEL PRODUCTO VM
     val loadingProductos = productoVM.loading
     val errorProductos = productoVM.error
+
+    val weatherVM: WeatherViewModel = viewModel() //variables para api de clima
+    val weatherState by weatherVM.ui.collectAsState()
+
 
     LaunchedEffect(Unit) {
         productoVM.cargarProductos()
@@ -159,6 +165,40 @@ fun PrincipalScreen(
                     val saludo = "Hola ${state.email ?: "usuario"}"
                     Text(saludo, style = MaterialTheme.typography.headlineSmall)
                     Text("Bienvenido a tu pantalla principal.")
+
+
+                    // ------------------ CLIMA ------------------
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    when {
+                        weatherState.loading -> {
+                            Box(
+                                Modifier
+                                    .fillMaxWidth()
+                                    .padding(12.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
+
+                        weatherState.error != null -> {
+                            Text(
+                                text = "Error clima: ${weatherState.error}",
+                                color = MaterialTheme.colorScheme.error,
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
+
+                        weatherState.data != null -> {
+                            WeatherCard(weather = weatherState.data)
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(12.dp))
+// ------------------------------------------
+
+
 
                     // Cargando productos
                     if (loadingProductos) {

@@ -9,8 +9,6 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.runtime.Composable
 import androidx.lifecycle.viewmodel.compose.viewModel
 import ui.login.LoginViewModel
 
@@ -19,16 +17,20 @@ import ui.login.LoginViewModel
 fun LoginScreen(
     onBack: () -> Unit,
     onLoginSuccess: () -> Unit,
+    onLogin: (String, String) -> Unit = { _, _ -> },   // ← AGREGADO PARA TEST
+    onGoToRegister: () -> Unit = {},                   // ← AGREGADO PARA TEST
     vm: LoginViewModel = viewModel()
 ) {
     val state by vm.ui.collectAsState()
 
     // Navegación reactiva
     LaunchedEffect(state.loggedIn) {
-        if (state.loggedIn) onLoginSuccess()
+        if (state.loggedIn) {
+            onLoginSuccess()
+        }
     }
 
-    // Snackbar opcional
+    // Snackbar
     val snackbarHostState = remember { SnackbarHostState() }
     LaunchedEffect(state.message) {
         state.message?.let {
@@ -82,11 +84,22 @@ fun LoginScreen(
                 }
 
                 Button(
-                    onClick = vm::submit,
+                    onClick = {
+                        onLogin(state.email, state.password)   // ← NECESARIO PARA LOS TESTS
+                        vm.submit()
+                    },
                     enabled = !state.loading,
                     modifier = Modifier.fillMaxWidth()
                 ) {
                     Text(if (state.loading) "Ingresando..." else "Ingresar")
+                }
+
+                // Botón extra para testear "Ir a Registro"
+                TextButton(
+                    onClick = onGoToRegister,                // ← NECESARIO PARA LOS TESTS
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                ) {
+                    Text("Registrarse")
                 }
             }
 
