@@ -1,54 +1,108 @@
-package cl.duoc.level_up_mobile;
+package cl.duoc.level_up_mobile
 
+import android.content.Context
 import android.net.Uri
-import cl.duoc.level_up_mobile.data.media.MediaRepository
-import cl.duoc.level_up_mobile.data.repository.UsuarioRepository
-import cl.duoc.level_up_mobile.repository.auth.FirebaseAuthDataSource
-import cl.duoc.level_up_mobile.ui.profile.ProfileViewModel
-import io.kotest.core.spec.style.StringSpec
-import io.kotest.matchers.shouldBe
+import com.google.firebase.auth.FirebaseUser
+import data.media.MediaRepository
+import repository.auth.FirebaseAuthDataSource
+import ui.profile.ProfileViewModel
 import io.mockk.every
 import io.mockk.mockk
-import kotlin.OptIn;
+import org.junit.Test
+import org.junit.Assert.*
 
-@OptIn(io.kotest.common.ExperimentalKotest::class) // habilita función experimental de Kotest y acepto los riesgos.
-class ProfileViewModelTest : StringSpec({ // define que cada test se nombra con un string
+class ProfileViewModelTest {
 
-    // mocks
+    @Test
+    fun init_debe_cargar_los_datos_del_usuario_actual_en_el_estado() {
+        // given
+        val fakeUser = mockk<FirebaseUser> {
+            every { uid } returns "uid123"
+            every { email } returns "test@correo.com"
+            every { displayName } returns "Usuario Test"
+        }
 
-    //llama a authRepo.currentUser(), finge que no hay usuario logueado
-    val authRepo = mockk<FirebaseAuthDataSource> {
+        val authRepo = mockk<FirebaseAuthDataSource> {
+            every { currentUser() } returns fakeUser
+        }
+        val mediaRepo = mockk<MediaRepository>(relaxed = true)
+
+        // when
+        val vm = ProfileViewModel(authRepo, mediaRepo)
+
+        // then
+        val state = vm.ui.value
+        assertEquals("uid123", state.uid)
+        assertEquals("test@correo.com", state.email)
+        assertEquals("Usuario Test", state.displayName)
+    }
+
+    @Test
+    fun setLastSavedPhoto_debe_actualizar_el_uri_en_el_estado() {
+        val authRepo = mockk<FirebaseAuthDataSource> {
             every { currentUser() } returns null
-    }
+        }
+        val mediaRepo = mockk<MediaRepository>(relaxed = true)
 
+        val vm = ProfileViewModel(authRepo, mediaRepo)
 
-    val mediaRepo = mockk<MediaRepository>(relaxed = true) // relaxed =  true MockK no hace nada pero tampoco falla
-    val userRepo = mockk<UsuarioRepository>(relaxed = true)
-
-    "guardarNombre debe copiar editingNombre a nombre y setear el msg" { //Nombre Test
-        val vm = ProfileViewModel(authRepo, mediaRepo, userRepo) // Se llama al viewmodel con mocks
-        vm.onNombreEdit("Nuevo Nombre") //Actualiza el campo nombre
-        vm.guardarNombre() //Ejecuta la funcion para guardar nombre
-
-        val state = vm.ui.value //Obtiene el estado actual del nombre
-        state.nombre shouldBe "Nuevo Nombre" //assert: Verificamos el nombre con el esperado
-        state.msg shouldBe "Nombre actualizado (local)" //assert: aparezca el mensaje actualizado
-    }
-
-    "clearMsg debe dejar msg en null" {
-        val vm = ProfileViewModel(authRepo, mediaRepo, userRepo)
-        vm.onNombreEdit("Hola")
-        vm.guardarNombre()
-        vm.clearMsg()
-
-        vm.ui.value.msg shouldBe null //Limpia msg valida que este null
-    }
-
-    "setLastSavedPhoto debe actualizar el uri en el estado" {
-        val vm = ProfileViewModel(authRepo, mediaRepo, userRepo)
         val fakeUri = mockk<Uri>()
         vm.setLastSavedPhoto(fakeUri)
-        vm.ui.value.lastSavedPhoto shouldBe fakeUri //verifica que la foto sea fakeUri
-    }
-})
 
+        assertEquals(fakeUri, vm.ui.value.lastSavedPhoto)
+    }
+
+    @Test
+    fun setError_debe_actualizar_el_mensaje_de_error() {
+        val authRepo = mockk<FirebaseAuthDataSource> {
+            every { currentUser() } returns null
+        }
+        val mediaRepo = mockk<MediaRepository>(relaxed = true)
+
+        val vm = ProfileViewModel(authRepo, mediaRepo)
+
+        vm.setError("Algo salió mal")
+
+        assertEquals("Algo salió mal", vm.ui.value.error)
+    }
+
+    @Test
+    fun createDestinationUriForCurrentUser_debe_devolver_null_si_no_hay_uid() {
+        val authRepo = mockk<FirebaseAuthDataSource> {
+            every { currentUser() } returns null
+        }
+        val mediaRepo = mockk<MediaRepository>(relaxed = true)
+
+        val vm = ProfileViewModel(authRepo, mediaRepo)
+        val context = mockk<Context>(relaxed = true)
+
+        val result = vm.createDestinationUriForCurrentUser(context)
+
+        assertNull(result)
+    }
+
+    @Test
+    fun createDestinationUriForCurrentUser_debe_usar_mediaRepo_cuando_hay_uid() {
+        val fakeUser = mockk<FirebaseUser> {
+            every { uid } returns "uid123"
+            every { email } returns "test@correo.com"
+            every { displayName } returns "Usuario Test"
+        }
+
+        val authRepo = mockk<FirebaseAuthDataSource> {
+            every { currentUser() } returns fakeUser
+        }
+
+        val expectedUri = mockk<Uri>()
+        val mediaRepo = mockk<MediaRepository> {
+            every { createImageUriForUser(any(), "uid123") } returns expectedUri
+        }
+
+        val vm = ProfileViewModel(authRepo, mediaRepo)
+        val context = mockk<Context>(relaxed = true)
+
+        val result = vm.createDestinationUriForCurrentUser(context)
+
+        assertEquals(expectedUri, result)
+    }
+}

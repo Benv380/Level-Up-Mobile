@@ -27,6 +27,11 @@ class PrincipalViewModel(
         _ui.update { it.copy(email = user?.email) }
     }
 
+    // --- SOLO PARA TESTS ---
+    fun setEmailForTest(email: String) {
+        _ui.update { it.copy(email = email) }
+    }
+
     fun logout() {
         viewModelScope.launch {
             _ui.update { it.copy(loading = true, error = null) }
@@ -39,3 +44,4 @@ class PrincipalViewModel(
         }
     }
 }
+

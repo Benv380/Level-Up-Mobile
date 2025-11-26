@@ -1,4 +1,5 @@
-package ui.principal
+package cl.duoc.level_up_mobile.ui.principal
+
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf

@@ -24,7 +24,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
 import cl.duoc.level_up_mobile.ui.principal.PrincipalViewModel
-import ui.principal.ProductoViewModel
+import cl.duoc.level_up_mobile.ui.principal.ProductoViewModel
 import ui.principal.WeatherViewModel
 import ui.principal.components.WeatherCard
 

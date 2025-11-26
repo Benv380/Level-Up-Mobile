@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "cl.duoc.level_up_mobile"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "cl.duoc.level_up_mobile"
         minSdk = 24
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0"
 
@@ -102,20 +102,20 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     ksp("androidx.room:room-compiler:$room_version")
 
-    // Testing
+    // Unit tests
     testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test:runner:1.5.2")
-    androidTestImplementation("androidx.test:rules:1.5.0")
+    testImplementation("io.mockk:mockk:1.13.12")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
 
     // Kotest
-    testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
-    testImplementation("io.kotest:kotest-assertions-core:5.8.0")
+    //testImplementation("io.kotest:kotest-runner-junit5:5.8.0")
+    //testImplementation("io.kotest:kotest-assertions-core:5.8.0")
 
-    // JUnit 5
-    testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
+    // JUnit
+    testImplementation("junit:junit:4.13.2")
 
     // MockK
-    testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("io.mockk:mockk:1.13.12")
 
     // Coroutines test
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
@@ -125,11 +125,19 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.6.2")
     implementation(kotlin("test"))
 
+    androidTestImplementation("androidx.test:runner:1.6.2")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:3.6.1")
 
 }
 
-tasks.withType<Test> {
-    useJUnitPlatform()
+configurations.all {
+    resolutionStrategy {
+        force("androidx.test:runner:1.6.2")
+        force("androidx.test:rules:1.6.1")
+        force("androidx.test.espresso:espresso-core:3.6.1")
+        force("androidx.test.espresso:espresso-intents:3.6.1")
+    }
 }
-
 
